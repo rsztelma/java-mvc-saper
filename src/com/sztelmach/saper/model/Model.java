@@ -40,7 +40,6 @@ public class Model
     {
 	this.minefield = new Minefield(Difficulty.BEGINNER_WIDTH,
 		Difficulty.BEGINNER_HEIGHT, Difficulty.BEGINNER_NR_OF_MINES);
-	this.minefield.setupMinefield(); /**ustawienie pol do gry*/
 	this.minesRemaining = Difficulty.BEGINNER_NR_OF_MINES;
 	this.status = Status.START;
 	this.timer = new Timer();
@@ -92,7 +91,6 @@ public class Model
     public void createNewGame(int width, int height, int nrOfMines)
     {
 	this.minefield = new Minefield(width, height, nrOfMines);
-	this.minefield.setupMinefield(); /**ustawienie pol do gry*/
 	this.setMinesRemaining(nrOfMines);
 	this.setStatus(Status.START);
 	this.timer.setGameTime(0); /**reset timer*/
@@ -175,6 +173,7 @@ public class Model
 	{
 	    case START:
 		this.setStatus(Status.PLAYING);
+		this.minefield.setupMinefield(width, height);
 	    case PLAYING:
 		temp = this.minefield.uncoverSquare(width, height);
 		if(temp == false) /**jesli nie odkryto zadnego pola*/

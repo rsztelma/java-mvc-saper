@@ -304,16 +304,33 @@ public class Minefield
     }
     
     /**
-     * Metoda prywatna sluzaca do ustawienia min na planszy.
+     * Metoda do konwersji wspolrzednych na pojedyncza liczbe.
+     * @param width wspolrzedna pozioma
+     * @param height wspolrzedna pionowa
+     * @return przekonwertowana wartosc
      */
-    private void setupMines()
+    private int convertCoordinates(int width, int height)
+    {
+	return height * getWidth() + width;
+    }
+    
+    /**
+     * Metoda prywatna sluzaca do ustawienia min na planszy.
+     * @param width wspolrzedna pozioma kliknietego pola
+     * @param height wspolrzedna pionowa kliknietego pola
+     */
+    private void setupMines(int width, int height)
     {
         ArrayList<Integer> list = new ArrayList<>(this.getWidth()*this.getHeight());
         for(int i = 0; i < this.getWidth()*this.getHeight(); i++)
 	    list.add(i);
-        Collections.shuffle(list, new Random()); /**losowe przemieszanie wartosci*/
+	for(int i = width - 1; i <= width + 1; i++)
+	    for(int j = height - 1; j <= height + 1; j++)
+		if(i >= 0 && i < getWidth() && j >= 0 && j < getHeight())
+		    list.remove((Integer)convertCoordinates(i, j));
+	Collections.shuffle(list, new Random()); /**losowe przemieszanie wartosci*/
         for(int k = 0; k < this.nrOfMines; k++) /**ustawienie min*/
-            this.setLabel(list.get(k)/getHeight(), list.get(k)%getHeight(), Label.MINE);
+	    this.setLabel(list.get(k)%getWidth(), list.get(k)/getWidth(), Label.MINE);
     }
     
     /**
@@ -342,12 +359,14 @@ public class Minefield
     
     /**
      * Metoda sluzaca do ustawienia pola do gry - min i cyfr poprzez wywolanie
-     * dwoch metod prywatnych {@link Minefield#setupMines()}
+     * dwoch metod prywatnych {@link Minefield#setupMines(int, int)}
      * oraz {@link Minefield#setupNumbers()}.
+     * @param width wspolrzedna pozioma kliknietego pola
+     * @param height wspolrzedna pionowa kliknietego pola
      */
-    public void setupMinefield()
+    public void setupMinefield(int width, int height)
     {
-	setupMines();
+	setupMines(width, height);
 	setupNumbers();
     }
     
